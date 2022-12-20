@@ -39,7 +39,7 @@ public class Link {
         return parameters;
     }
 
-    public void setOptionalParameters(String key, String value) {
+    public void setParameters(String key, String value) {
         this.parameters.put(key, value);
     }
 

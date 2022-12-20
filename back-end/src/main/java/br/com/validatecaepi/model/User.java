@@ -17,7 +17,8 @@ public class User implements Serializable {
 	
 	@Id
 	private String id;
-	private String name;
+	private String firstname;
+	private String lastname;
 	private String email;
 	private int loginAttempt;
 	private String observation;
@@ -31,10 +32,11 @@ public class User implements Serializable {
 	public User() {
 	}
 
-	public User(String id, String name, String email, String profile) {
+	public User(String id, String firstname, String lastname, String email, String profile) {
 		super();
 		this.id = id;
-		this.name = name;
+		this.firstname = firstname;
+		this.lastname = lastname;
 		this.email = email.toLowerCase().trim();
 		addProfile(profile);
 	}
@@ -42,7 +44,8 @@ public class User implements Serializable {
 	public User(RegisterDto registerDto) {
 		super();
 		this.id = null;
-		this.name = registerDto.getUserName();
+		this.firstname = registerDto.getFirstname();
+		this.lastname = registerDto.getLastname();
 		this.email = registerDto.getEmail().toLowerCase().trim();
 	}
 
@@ -54,12 +57,20 @@ public class User implements Serializable {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getFirstname() {
+		return firstname;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+
+	public String getLastname() {
+		return lastname;
+	}
+
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
 	}
 
 	public String getEmail() {
@@ -162,7 +173,8 @@ public class User implements Serializable {
 	public String toString() {
 		return "User{" +
 				"id='" + id + '\'' +
-				", name='" + name + '\'' +
+				", firstname='" + firstname + '\'' +
+				", lastname='" + lastname + '\'' +
 				", email='" + email + '\'' +
 				", loginAttempt=" + loginAttempt +
 				", observation='" + observation + '\'' +

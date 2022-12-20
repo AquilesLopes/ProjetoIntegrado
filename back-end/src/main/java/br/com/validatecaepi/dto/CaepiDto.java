@@ -19,9 +19,6 @@ public class CaepiDto implements Serializable {
     private LocalDate validity;
     private Equipment equipment;
     private Report report;
-
-
-
     private List<Link> links = new ArrayList<Link>();
 
     public CaepiDto(){

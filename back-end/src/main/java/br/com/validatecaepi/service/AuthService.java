@@ -20,11 +20,15 @@ public class AuthService {
     private AuthenticationManager authenticationManager;
     private JWTGenerator jwtGenerator;
 
+    private UrlMapperService urlMapperService;
+
     @Autowired
     public AuthService(AuthenticationManager authenticationManager,
-                          JWTGenerator jwtGenerator) {
+                       JWTGenerator jwtGenerator,
+                       UrlMapperService urlMapperService) {
         this.authenticationManager = authenticationManager;
         this.jwtGenerator = jwtGenerator;
+        this.urlMapperService = urlMapperService;
     }
 
     public AuthTokenJwtDto login(LoginDto loginDto) {
@@ -39,7 +43,10 @@ public class AuthService {
         String token = jwtGenerator.generateToken(authentication);
         Date expiration = jwtGenerator.getExpirationFromJWT(token);
 
-        return new AuthTokenJwtDto(token, expiration, "Bearer");
+        AuthTokenJwtDto tokenDto = new AuthTokenJwtDto(token, expiration, "Bearer");
+        urlMapperService.mapperTokenDto(tokenDto);
+
+        return tokenDto;
     }
 
 }

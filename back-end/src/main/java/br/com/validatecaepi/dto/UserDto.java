@@ -1,24 +1,31 @@
 package br.com.validatecaepi.dto;
 
+import br.com.validatecaepi.model.Link;
 import br.com.validatecaepi.model.User;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class UserDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private String id;
-	private String name;
+	private String firstname;
+	private String lastname;
 	private String email;
 	private String profile;
+
+	private List<Link> links = new ArrayList<Link>();
 
 	public UserDto() {
 	}
 	
 	public UserDto(User obj) {
 		id = obj.getId();
-		name = obj.getName();
+		firstname = obj.getFirstname();
+		lastname = obj.getLastname();
 		email = obj.getEmail();
 		profile = obj.getRoles().toString();
 	}
@@ -31,12 +38,20 @@ public class UserDto implements Serializable {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getFirstname() {
+		return firstname;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+
+	public String getLastname() {
+		return lastname;
+	}
+
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
 	}
 
 	public String getEmail() {
@@ -55,19 +70,14 @@ public class UserDto implements Serializable {
 		this.profile = profile;
 	}
 
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("UserDTO [id=");
-		builder.append(id);
-		builder.append(", name=");
-		builder.append(name);
-		builder.append(", email=");
-		builder.append(email);
-		builder.append(", profile=");
-		builder.append(profile);
-		builder.append("]");
-		return builder.toString();
+	public List<Link> getLinks() {
+		return links;
 	}
+
+	public void setLinks(List<Link> links) {
+		this.links = links;
+	}
+
+
 	
 }

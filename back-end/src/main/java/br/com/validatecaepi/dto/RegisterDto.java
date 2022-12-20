@@ -8,8 +8,8 @@ import java.io.Serializable;
 public class RegisterDto implements Serializable {
     private static final long serialVersionUID = 1L;
     @NotBlank(message = "is mandatory")
-    @Size(min = 10, max = 100, message = "must contain between 10 and 100 characters")
-    private String userName;
+    @Size(min = 5, max = 30, message = "must contain between 5 and 30 characters")
+    private String firstname;
     @NotBlank(message = "is mandatory")
     @Size(min = 10, max = 100, message = "must contain between 10 and 100 characters")
     private String lastname;
@@ -20,12 +20,20 @@ public class RegisterDto implements Serializable {
     @Size(min = 6, max = 15, message = "must contain between 6 and 15 characters")
     private String password;
 
-    public String getUserName() {
-        return userName;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     public String getEmail() {
