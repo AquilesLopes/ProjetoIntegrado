@@ -1,0 +1,7 @@
+{
+  "name": "Find CAEPI",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}

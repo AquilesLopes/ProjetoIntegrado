@@ -1,0 +1,13 @@
+
+//MOBILE
+@mixin mobile {
+    @media (max-width: 600px){
+        @content
+    }
+}
+  
+// PLACEHOLDER SELECTORS
+%title-text-shadow {
+    text-shadow: 3px 2px $black
+}
+    

@@ -1,0 +1,37 @@
+#menu-bar-toolbar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#app-bar {
+    background-color: $menu-bg;
+    opacity: 1;
+}
+
+#btn-icon-language {
+    padding: 0px;
+    color: rgb(207, 206, 206);
+
+    &:hover {
+        color: rgb(255, 255, 255);
+    }
+}
+
+.image-language {
+    height: 25px;
+    width: 30px;
+    margin-right: 10px;
+}
+
+.box-modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.img-qrcode {
+    height: 80%;
+    width: 80%;
+}

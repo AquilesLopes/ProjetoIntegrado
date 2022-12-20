@@ -1,0 +1,106 @@
+@import './variables';
+@import './utilities';
+@import './menu_home';
+@import './menu';
+@import './form';
+@import './page_home';
+@import './page_register';
+@import './page_login';
+@import './footer';
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+}
+
+/* Works on Firefox */
+* {
+    scrollbar-width: thin; 
+    scrollbar-color: #27405e white;
+}
+    
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 3px;
+}
+    
+*::-webkit-scrollbar-track {
+    background: white;
+}
+    
+*::-webkit-scrollbar-thumb {
+    background-color: #27405e;
+    border-radius: 0px;
+}
+
+code {
+    color: rgb(255, 0, 43);
+}
+
+ion-title {
+    margin-left: 10px;
+}
+
+
+
+.title-page {
+    margin-left: 20px;
+    font-size: 2rem;
+    margin-top: 0.5rem;
+}
+
+.ion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+
+    .menu-user {
+        margin-right: 20px;
+    }
+}
+
+.ion-content {
+    margin-top: 50px;
+}
+
+.card-find-caepi {
+    min-height: 245px;
+    margin-left: 5px;
+    margin-right: 5px;
+
+    @include mobile {
+        min-height: 100px;
+    }
+}
+
+.card {
+    margin: 10px;
+}
+
+.grid-img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+
+    img {
+        width: 65%;
+        height: 'auto';
+
+        @include mobile {
+            width: 40%;
+        }
+    }
+}
+
+.grid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+

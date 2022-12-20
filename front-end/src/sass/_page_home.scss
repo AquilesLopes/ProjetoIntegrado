@@ -1,0 +1,61 @@
+.fadeout {
+    opacity: 0;
+    -moz-transition: opacity 1.5s;
+    -webkit-transition: opacity 1.5s;
+    -o-transition: opacity 1.5s;
+    transition: opacity 1.5s;
+}
+
+.fadein {
+    opacity: 1;
+    -moz-transition: opacity 1.5s;
+    -webkit-transition: opacity 1.5s;
+    -o-transition: opacity 1.5s;
+    transition: opacity 1.5s;
+}
+
+.main-banner {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    height: 96vh;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(../assets/img/background.jpg);
+    background-size: cover;
+    background-position: center;
+    color: $ligth-color;
+
+    h2 {
+        margin-left: 1rem;
+        font-size: 3rem;
+        @extend %title-text-shadow;
+
+        @include mobile {
+            font-size: 2rem;
+        }
+    }
+
+    h1 {
+        margin-left: 1rem;
+        font-size: 4rem;
+        @extend %title-text-shadow;
+
+        @include mobile {
+            font-size: 3rem;
+        }
+    }
+
+    .grid {
+        justify-content: center;
+    }
+
+    .footer {
+        align-self: flex-end;
+        justify-content: flex-end;
+        margin-right: 2rem;
+        margin-bottom: 3rem;
+
+        @include mobile {
+            margin-bottom: 6rem;
+        }
+    }
+}
