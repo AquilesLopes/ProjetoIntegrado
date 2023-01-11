@@ -9,7 +9,7 @@ import { useHistory } from 'react-router';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { setUserState } from '../../../features/userReducer';
-import { cleanStorage } from '../../../util/util';
+import { cleanStorage, emptyUser } from '../../../util/util';
 
 export default function ItemsUser({setAnchorEl} : any) {
   const history = useHistory();
@@ -24,7 +24,7 @@ export default function ItemsUser({setAnchorEl} : any) {
     setAnchorEl(null);
     const idToast = toast.loading("Removendo dados do navegador...");
     cleanStorage();
-    dispatch(setUserState(undefined));
+    dispatch(setUserState(emptyUser()));
     setTimeout(() => {
       toast.update(idToast, {render: "Removido com sucesso!", type: "success", isLoading: false, autoClose: 1500});
       history.push("/");

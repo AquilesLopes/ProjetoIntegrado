@@ -5,6 +5,8 @@ import ListItemText from '@mui/material/ListItemText';
 import { CardContent, Grid, List, ListItem, Typography } from '@mui/material';
 import blue_shield from '../../assets/img/blue_shield.svg';
 import { isMobile } from '../../util/util';
+import women_pc from '../../assets/img/women_pc.png';
+import vector from '../../assets/img/vector.svg';
 
 const itens = [
   {id: 1, description: 'Todo comunicação criptografada com SSL;'},
@@ -18,35 +20,30 @@ const itens = [
 export default function CardInfoApi() {
   return (
     <React.Fragment>
-        <Grid container direction={isMobile ? "row" : "row-reverse"} 
-              className="grid" spacing={{ xs: 1, md: 4}}>
-            <Grid item className="grid-img" xs={12} md={4}>
-              <img src={blue_shield} />
-            </Grid>
-            <Grid item xs={12} md={6}>
-                  <CardContent sx={{textAlign: 'center'}}>
-                      <Typography variant="h6" component="div">API sem complicações</Typography>
-                      <Typography>
-                        Documentação completa e direto ao ponto, sem enrolação.
-                      </Typography>
-                  </CardContent>
-
-                  <CardContent>
-                      <List dense={false}>
-                        {itens.map(item => (
-                          <ListItem key={item.id}>
-                            <ListItemIcon>
-                              <LabelImportantIcon />
-                            </ListItemIcon>
-                            <ListItemText
-                              primary={item.description}
-                            />
-                          </ListItem>
-                        ))}
-                      </List>
-                  </CardContent>
-            </Grid>
-        </Grid>
+      <React.Fragment>
+          <div className="grid-api">
+              <div className="grid-api-img">
+                <img className="img-card-pc" src={women_pc} />
+              </div>
+              <div className="grid-api-content">
+                    <CardContent>
+                        <p className="grid-api-title">API sem complicações</p>
+                        <p className="grid-api-sub-title">
+                           Documentação completa e direto ao ponto, sem enrolação.
+                        </p>
+                    </CardContent>
+                    <CardContent>
+                        <List dense={false}>
+                          {itens.map(item => (
+                            <p className="grid-api-item-list" key={item.id}>
+                              <img src={vector} /> {item.description}
+                            </p>
+                          ))}
+                        </List>
+                    </CardContent>
+              </div>
+          </div>
+      </React.Fragment>
     </React.Fragment>
   );
 }

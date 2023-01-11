@@ -10,6 +10,8 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { hasErrosInputs } from '../../util/util';
 import { toast } from 'react-toastify';
+import { useAppDispatch } from '../../app/hooks';
+import { setUserState } from '../../features/userReducer';
 
 interface IFormLogin {
   email: string,
@@ -50,6 +52,7 @@ function hasErros(value : string | undefined){
 }
 
 export default function FormLogin() {
+  const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = React.useState(false);
   const history = useHistory();
 
@@ -77,13 +80,15 @@ export default function FormLogin() {
           const idToast = toast.loading("Logando...");
           setTimeout(() => {
             var nameUser = values.email.split('@')[0];
-            nameUser = nameUser[0].toUpperCase() + nameUser.substring(1);
 
-            setUserStorage({
-              name: nameUser,
+            const userLoged = {
+              name: nameUser[0].toUpperCase() + nameUser.substring(1),
               lastname: "",
               email: values.email
-            });
+            }
+
+            setUserStorage(userLoged);
+            dispatch(setUserState(userLoged));
 
             toast.update(idToast, {
               render: "Logado com sucesso!", 

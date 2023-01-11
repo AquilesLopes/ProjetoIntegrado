@@ -1,7 +1,23 @@
 import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import CardFindCaepi from '../components/home/find_caepi/FindCaepi';
+import { useHistory } from 'react-router';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import FindCaepiUser from '../components/home/find_caepi/FindCaepiUser';
+import { getUserState, setUserState } from '../features/userReducer';
+import { getUserStorage } from '../services/UserStorage';
 
 export default function FindCaepiPage () {
+  const history = useHistory();
+  const userStorage = getUserStorage();
+
+  const user = useAppSelector(getUserState);
+  const dispatch = useAppDispatch();
+
+  if(userStorage.name.length > 0 && user.name.length === 0){
+    dispatch(setUserState(userStorage));
+  }else if(user.name.length == 0){
+    history.push("/");
+  }
+
   return (
     <IonPage>
       <IonHeader>
@@ -20,7 +36,7 @@ export default function FindCaepiPage () {
           </IonToolbar>
         </IonHeader>
         
-        <CardFindCaepi />
+        <FindCaepiUser />
       </IonContent>
     </IonPage>
   );

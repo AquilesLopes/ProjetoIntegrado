@@ -1,22 +1,23 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
 import { IUser } from '../interface/IUser';
+import { emptyUser } from '../util/util';
 
 export interface IUserState {
-  value: IUser | undefined;
+  value: IUser;
   status: 'idle' | 'loading' | 'failed';
 }
 
 const initialState: IUserState = {
-  value: undefined,
+  value: emptyUser(),
   status: 'idle',
 };
 
 export const userSlice = createSlice({
-  name: 'showModalCaepi',
+  name: 'User Slice',
   initialState,
   reducers: {
-    setUserState: (state, action: PayloadAction<IUser | undefined>) => {
+    setUserState: (state, action: PayloadAction<IUser>) => {
       state.value = action.payload;
     },
   },

@@ -46,4 +46,30 @@ public class DateConverter {
         }
     }
 
+    public static LocalDateTime formatDateFromFtp(String strDate, String strTime){
+        String HH = "";
+        String mm = "";
+        String meridian = "";
+
+        try{
+            HH = strTime.substring(0, 2);
+            mm = strTime.substring(3, 5);
+            meridian = strTime.substring(5, 7);
+        }catch (Exception e) {
+            HH = "00";
+            mm = "00";
+            meridian = "";
+        }
+
+        strDate += " " + HH + ":" + mm + ":00";
+
+        LocalDateTime date = strToLocalDateTime(strDate, "MM-dd-yy HH:mm:ss");
+
+        if(meridian.equalsIgnoreCase("PM")){
+            date = date.plusHours(12);
+        }
+
+        return date;
+    }
+
 }

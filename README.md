@@ -23,11 +23,14 @@
     - JUnit 5;
     - Mockito;
 
+### Data Base
+    - MongoDB;
+
 ## Site de Apresentação
-- Get CAEPI ([guide](https://get-caepi.com.br))
+- Get CAEPI ([get-caepi.com.br](https://get-caepi.com.br))
 
 ## Documentação Swagger
-- Get CAEPI ([guide](https://get-caepi.com.br/api/swagger-ui))
+- Get CAEPI ([get-caepi.com.br/api/swagger-ui](https://get-caepi.com.br/api/swagger-ui))
 
 
 Para testar o front-end: 

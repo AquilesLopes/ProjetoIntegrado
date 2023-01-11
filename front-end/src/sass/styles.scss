@@ -4,9 +4,11 @@
 @import './menu';
 @import './form';
 @import './page_home';
+@import './page_user';
 @import './page_register';
 @import './page_login';
 @import './footer';
+@import './card_api_restful';
 
 * {
     padding: 0;
@@ -34,6 +36,10 @@
 *::-webkit-scrollbar-thumb {
     background-color: #27405e;
     border-radius: 0px;
+}
+
+a {
+    text-decoration: none;
 }
 
 code {

@@ -3,6 +3,18 @@
   "name": "API CAEPI",
   "icons": [
     {
+      "src": "assets/icon/mipmap-xxhdpi/ic_launcher.png",
+      "type": "image/png",
+      "sizes": "144x144",
+      "purpose": "maskable"
+    },
+    {
+      "src": "assets/icon/mipmap-xxxhdpi/ic_launcher.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "maskable"
+    },
+    {
       "src": "assets/icon/playstore.png",
       "type": "image/png",
       "sizes": "512x512",
@@ -11,6 +23,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#ffffff",
+  "theme_color": "#188268",
   "background_color": "#ffffff"
 }

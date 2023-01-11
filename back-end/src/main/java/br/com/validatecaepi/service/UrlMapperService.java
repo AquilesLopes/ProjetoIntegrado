@@ -16,16 +16,18 @@ public class UrlMapperService {
         Link linkManufacturer = new Link();
         linkManufacturer.setUrl(URL_BASE + "/api/v1/manufacturer/" + caepiDTO.getEquipment().getManufacturer().getCnpj());
         linkManufacturer.setType("GET");
-        linkManufacturer.setDescription("Returns a page CAEPI by manufacturer, sorted descending by caepi number");
-        linkManufacturer.setParameters("page", "page number, default 0");
-        linkManufacturer.setParameters("size", "Page size, default 0, minimum 3, maximum 20");
+        linkManufacturer.setDescription("Returns a page CAEPI by manufacturer, sorted descending by CAEPI number");
+        linkManufacturer.setParameters("Authorization", "Header Parameter, Bearer ...Your Token...");
+        linkManufacturer.setParameters("page", "Request Parameter, default 0");
+        linkManufacturer.setParameters("size", "Request Parameter, default 10, minimum 3, maximum 20");
 
         Link linkLaboratory = new Link();
         linkLaboratory.setUrl(URL_BASE + "/api/v1/laboratory/" + caepiDTO.getReport().getLaboratory().getCnpj());
         linkLaboratory.setType("GET");
-        linkLaboratory.setDescription("List CAEPI by laboratory, sorted descending by caepi number");
-        linkLaboratory.setParameters("page", "page number");
-        linkLaboratory.setParameters("size", "Page size, minimum 3, maximum 20");
+        linkLaboratory.setDescription("List CAEPI by laboratory, sorted descending by CAEPI number");
+        linkLaboratory.setParameters("Authorization", "Header Parameter, Bearer ...Your Token...");
+        linkLaboratory.setParameters("page", "Request Parameter, default 0");
+        linkLaboratory.setParameters("size", "Request Parameter, default 10, minimum 3, maximum 20");
 
         caepiDTO.getLinks().add(linkManufacturer);
         caepiDTO.getLinks().add(linkLaboratory);
@@ -36,7 +38,7 @@ public class UrlMapperService {
         linkRefresh.setUrl(URL_BASE + "/api/v1/auth/refresh");
         linkRefresh.setType("GET");
         linkRefresh.setDescription("Refresh Token");
-        linkRefresh.setParameters("Authorization", "Bearer your token");
+        linkRefresh.setParameters("Authorization", "Header Parameter, Bearer ...Your Token...");
 
         tokenDto.getLinks().add(linkRefresh);
     }

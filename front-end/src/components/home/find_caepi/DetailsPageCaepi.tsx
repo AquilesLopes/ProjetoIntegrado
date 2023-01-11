@@ -1,19 +1,16 @@
 import * as React from 'react';
-import { Box, CardContent, Divider, Modal, Typography } from '@mui/material';
-import { caepiValid, formatDate, styleModal } from '../../../util/util';
+import { CardContent, Typography } from '@mui/material';
 import { caepiMocks } from '../../../mock/caepi_mocks';
 import { useAppSelector } from '../../../app/hooks';
 import { getFindCaepiState } from '../../../features/findCaepiReducer';
 import CardCaepi from './CardCaepi';
 import { useLocation } from 'react-router';
-import ModalCaepi from './ModalCaepi';
 import ICaepi from '../../../interface/ICaepi';
 import Validator from '../../../services/Validator';
 
 export default function CardDetailsPageCaepi() {
     const location = useLocation();
     const getFindCaepi = useAppSelector(getFindCaepiState);
-    const showModalCaepi = location.pathname === '/' ? true : false;
     var pageCaepi : ICaepi[] = [];
     const isCnpj = Validator.isCNPJ(getFindCaepi);
 
@@ -31,8 +28,7 @@ export default function CardDetailsPageCaepi() {
         return (
             <React.Fragment>
                 {pageCaepi.length > 0 ? 
-                    showModalCaepi ? <ModalCaepi caepi={pageCaepi}></ModalCaepi> 
-                    : pageCaepi.map(caepi => (
+                    pageCaepi.map(caepi => (
                         <CardCaepi key={caepi.number} caepi={caepi}></CardCaepi>
                     ))
                 : 

@@ -2,7 +2,7 @@ package br.com.validatecaepi.config;
 
 import br.com.validatecaepi.model.Caepi;
 import br.com.validatecaepi.repository.CaepiRepository;
-import br.com.validatecaepi.service.BaseService;
+import br.com.validatecaepi.service.BaseFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,10 +15,10 @@ import java.util.List;
 public class DevConfig {
 
 	private final CaepiRepository repoCaepi;
-	private final BaseService baseCaepi;
+	private final BaseFileService baseCaepi;
 
 	@Autowired
-	public DevConfig(CaepiRepository repoCaepi, BaseService baseCaepi) {
+	public DevConfig(CaepiRepository repoCaepi, BaseFileService baseCaepi) {
 		this.repoCaepi = repoCaepi;
 		this.baseCaepi = baseCaepi;
 	}

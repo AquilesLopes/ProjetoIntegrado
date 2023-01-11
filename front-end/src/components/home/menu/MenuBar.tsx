@@ -16,16 +16,10 @@ import ItemsUser from './ItemsUser';
 import { getUserStorage } from '../../../services/UserStorage';
 import { CONFIG } from '../../../util/config';
 
-import userAvatar from '../../../assets/img/user_avatar.png'
+import userAvatar from '../../../assets/img/user_avatar.png';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { getUserState, setUserState } from '../../../features/userReducer';
 import { isMobile } from '../../../util/util';
-
-const userDefaults = {
-  name: '',
-  email: '',
-  lastname: '',
-};
 
 export default function MenuBar() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -43,10 +37,8 @@ export default function MenuBar() {
   const user = useAppSelector(getUserState);
   const dispatch = useAppDispatch();
 
-  if(userStorage !== null && userStorage !== undefined){
-     if(user === undefined || user === null){
-        dispatch(setUserState(userStorage));
-     }
+  if(userStorage.name.length > 0 && user.name.length === 0){
+    dispatch(setUserState(userStorage));
   }
 
   return (
@@ -64,9 +56,9 @@ export default function MenuBar() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            {user ? 
+            {user.name.length > 0 ?
               <Stack direction="row" sx={{cursor: "pointer"}} spacing={0.5} onClick={handleOpenMenu}>
-                <Avatar alt="" src={userAvatar} />
+                <Avatar alt="" src={user?.image ? user?.image : userAvatar} />
                 {isMobile ? <></>
                 :
                   <Typography sx={{color: 'black'}} variant="h6" component="h6">
@@ -95,7 +87,7 @@ export default function MenuBar() {
               open={Boolean(anchorEl)}
               onClose={handleCloseMenu}
             >
-            {user ?
+            {user.name.length > 0 ?
               <ItemsUser setAnchorEl={setAnchorEl} />
               : 
               <ItemsVisitor setAnchorEl={setAnchorEl} />

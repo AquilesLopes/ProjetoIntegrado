@@ -10,16 +10,17 @@ import {
 } from '@ionic/react';
 
 import { useHistory, useLocation } from 'react-router-dom';
-import { archiveOutline, searchOutline, search, exit,  archiveSharp, bookmark, paperPlaneOutline, paperPlaneSharp, trashOutline, trashSharp, warningOutline, warningSharp } from 'ionicons/icons';
+import { archiveOutline, searchOutline, search, exit,  archiveSharp, bookmark, paperPlaneOutline, paperPlaneSharp } from 'ionicons/icons';
 import { CONFIG } from '../util/config';
 import { toast } from 'react-toastify';
-import { removeUserStorage } from '../services/UserStorage';
 import { setUserState } from '../features/userReducer';
-import { useAppDispatch } from '../app/hooks';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
 import HistoryIcon from '@mui/icons-material/History';
 import { getCaepiStorage } from '../services/CaepiStorage';
-import { caepiValid, cleanStorage } from '../util/util';
+import { caepiValid, cleanStorage, emptyUser } from '../util/util';
 import { setFindCaepiState } from '../features/findCaepiReducer';
+import ICaepi from '../interface/ICaepi';
+import { getHistoricCaepiState, setHistoricCaepiState } from '../features/historicCaepiReducer';
 
 interface AppPage {
   url: string;
@@ -60,12 +61,17 @@ export default function Menu(){
   const dispatch = useAppDispatch();
   const history = useHistory();
   const location = useLocation();
-  const listCaepi = getCaepiStorage();
+  const listCaepi : ICaepi[] = useAppSelector(getHistoricCaepiState);
+
+  if(listCaepi.length === 0 && getCaepiStorage().length > 0){
+     dispatch(setHistoricCaepiState(getCaepiStorage()));
+  }
 
   function exitSystem(){
     const idToast = toast.loading("Removendo dados do navegador...");
     cleanStorage();
-    dispatch(setUserState(undefined));
+    dispatch(setUserState(emptyUser()));
+    dispatch(setHistoricCaepiState([]));
     setTimeout(() => {
       toast.update(idToast, {render: "Removido com sucesso!", type: "success", isLoading: false, autoClose: 1500});
       history.push("/");

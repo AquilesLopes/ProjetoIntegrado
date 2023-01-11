@@ -3,7 +3,7 @@ import { isMobile } from "../../util/util";
 
 export const data = [
   ["", "Limite", "Realizadas"],
-  ["Hoje", 500, 178],
+  ["Hoje", 500, 278],
 ];
 
 export const options = {
@@ -32,7 +32,7 @@ const ChartBarUser: React.FC = () => {
     <Chart 
       chartType="Bar"
       width={isMobile ? "100%" : "80%"}
-      height="300px"
+      height="200px"
       data={data}
       options={options}
     />

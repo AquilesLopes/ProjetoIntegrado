@@ -1,11 +1,13 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import counterReducer from '../features/findCaepiReducer';
+import historicCaepiReducer from '../features/historicCaepiReducer';
 import userReducer from '../features/userReducer';
 
 export const store = configureStore({
   reducer: {
     findCaepi: counterReducer,
     user: userReducer,
+    historicCaepi: historicCaepiReducer,
   }, 
 });
 

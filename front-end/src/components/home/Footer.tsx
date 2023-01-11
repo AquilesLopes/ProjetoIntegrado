@@ -22,15 +22,49 @@ export default function Footer() {
         whatsappLink: linkWhatsapp,
     }
 
+    function topPage(){
+        var stepTime = 20;
+        var docBody = document.body;
+        var focElem = document.documentElement;
+        
+        var scrollAnimationStep = function (initPos : number, stepAmount : number) {
+            var newPos = initPos - stepAmount > 0 ? initPos - stepAmount : 0;
+        
+            docBody.scrollTop = focElem.scrollTop = newPos;
+        
+            newPos && setTimeout(function () {
+                scrollAnimationStep(newPos, stepAmount);
+            }, stepTime);
+        }
+        
+        var scrollTopAnimated = function (speed : number) {
+            var topOffset = docBody.scrollTop || focElem.scrollTop;
+            var stepAmount = topOffset;
+        
+            speed && (stepAmount = (topOffset * stepTime)/speed);
+        
+            scrollAnimationStep(topOffset, stepAmount);
+        };
+    }
+
     return (
         <footer id="main-contact">
             <div className="footer-container">
                 <div className="footer-desc-container">
                     <h3 className="footer-title">{CONFIG.nameSystem}</h3>
+                    <p>
+                        Code licensed 
+                        <a href={CONFIG.license.url} target="_blank">
+                            {CONFIG.license.name}
+                        </a>
+                    </p>
+                    <p>
+                        Currently {CONFIG.version}
+                    </p>
                 </div> 
                 <div className="footer-links-container">
                     <div className="footer-links-container-list">
-                        <a href="javascript:void(0)">
+                        <a href="javascript:void(0)" onClick={topPage}>
                             <LanguageIcon className="footer-links-container-icon" /> 
                             {conf.site}
                         </a>

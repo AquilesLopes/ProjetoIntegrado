@@ -28,7 +28,7 @@ export default function CardCaepi({caepi} : any) {
               <Divider light sx={{marginTop: '5px', marginBottom: '5px'}} />
               <Typography component="p">
                   <small>
-                    Fonte: Base de dados do Departamento de Segurança e Saúde no Trabalho 
+                    Fonte: Base de dados do Departamento de Segurança e Saúde no Trabalho, 
                     publicada em {formatDateTime(caepi.update)}
                   </small>
               </Typography>

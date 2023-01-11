@@ -10,6 +10,8 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { hasErrosInputs } from '../../util/util';
 import { toast } from 'react-toastify';
+import { setUserState } from '../../features/userReducer';
+import { useAppDispatch } from '../../app/hooks';
 
 interface IFormRegister {
   name: string,
@@ -66,6 +68,7 @@ function hasErros(value : string | undefined){
 }
 
 export default function FormRegister() {
+  const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = React.useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] = React.useState(false);
   const history = useHistory();
@@ -105,11 +108,15 @@ export default function FormRegister() {
         onSubmit={(values, { setSubmitting }) => {
           const idToast = toast.loading("Enviando...");
           setTimeout(() => {
-            setUserStorage({
+
+            const userLoged = {
               name: values.name,
               lastname: values.lastname,
               email: values.email
-            });
+            }
+
+            setUserStorage(userLoged);
+            dispatch(setUserState(userLoged));
 
             toast.update(idToast, {
               render: "Cadastrado com sucesso!", 

@@ -14,7 +14,7 @@ const initialState: IFindCaepiState = {
 };
 
 export const findCaepiSlice = createSlice({
-  name: 'showModalCaepi',
+  name: 'Find CAEPI Slice',
   initialState,
   reducers: {
     setFindCaepiState: (state, action: PayloadAction<string>) => {

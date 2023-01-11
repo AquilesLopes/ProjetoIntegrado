@@ -1,0 +1,86 @@
+
+.n-1 {
+    margin-right: 20px;
+}
+
+.n-2 {
+    margin-right: 40px;
+}
+
+.n-3 {
+    margin-right: 60px;
+}
+
+.card-api-restful {
+    margin-left: 60px;
+
+    @include mobile {
+        margin-left: 5px;
+    }
+
+    &-title {
+        color: $secondary-color;
+        font-weight: 500;
+        font-size: 32px;
+        border-bottom: 2px solid $secondary-color;
+    }
+
+    &-sub-title {
+        margin-top: 20px;
+        color: $text-color;
+        font-weight: 400;
+        font-size: 16px;
+    }
+
+    &-body {
+        margin-top: 20px;
+        background-color: #F5F5F5;
+        padding: 40px;
+        font-weight: 300;
+        font-size: 15px;
+        color: $text-color;
+
+        p {
+            font-weight: 300;
+            font-size: 15px;
+            color: $text-color;
+        }
+
+        @include mobile {
+            padding: 5px;
+            font-size: 12px;
+
+            p {
+                font-size: 12px;
+            }
+        }
+    }
+
+    &-body-title {
+        margin-top: 50px;
+        margin-bottom: 20px;
+        color: $secondary-color;
+        font-weight: 700;
+        font-size: 16px;
+    }
+
+    &-body-text {
+        color: $text-color;
+        font-weight: 400;
+        font-size: 16px;
+    }
+
+    &-info {
+        margin-top: 20px;
+        margin-bottom: 50px;
+        color: $text-color;
+        font-weight: 500;
+        font-size: 15px;
+
+        span {
+            color: rgb(255, 0, 0);
+        }
+    }
+
+}
+

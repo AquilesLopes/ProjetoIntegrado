@@ -25,7 +25,7 @@ public class OpenApiConfig {
                 .externalDocs(
                         new ExternalDocumentation()
                         .description("Validation CAEPI Documentation")
-                        .url("https://validate-caepi.com.br")
+                        .url("https://getcaepi.com.br")
                 );
 
     }

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { CardContent, Divider, Typography } from '@mui/material';
+import { CardContent } from '@mui/material';
 import { CONFIG } from '../../../util/config';
 
 const caepi = {
@@ -32,47 +32,61 @@ const caepi = {
     }
   },
   urls: [
-    {url: 'URL usada com protocolo GET', description: 'Descreve o que a URL recupera'}
+    {
+      url: 'Endereço URL', 
+      description: 'Descreve o que a URL faz',
+      type: 'GET | POST | PUT | PATCH | DELETE', 
+      parameters: [
+        {nameParameter: 'Descreve regras para o parâmetro'}
+      ]
+    }
   ]
 }
 
 export default function CardContentCaepi() {
   return (
     <React.Fragment>
-      <CardContent>
-        <Typography variant="h6" sx={{textAlign: 'center'}} component="div">Estrutura de dados CAEPI</Typography>
-        <Typography>Após o login adicione o Token no header da requisição.</Typography>
-        <Typography><code>{CONFIG.urlBase}/api/v1/caepi/{"{NÚMERO_REGISTRO_CA}"}</code></Typography>
-        <Typography><code>Protocolo</code>: <small><b>GET</b></small></Typography>
-        <Typography><code>Authorization</code>: <small>Bearer ...Seu Token...</small></Typography>
-        <Divider light sx={{marginTop: '5px', marginBottom: '5px'}} />
-        <Typography><code>number</code>: <small>{caepi.number}</small></Typography>
-        <Typography><code>status</code>: <small>{caepi.status}</small></Typography>
-        <Typography><code>update</code>: <small>{caepi.update}</small></Typography>
-        <Typography><code>validity</code>: <small>{caepi.validity}</small></Typography>
-        <Typography><code>equipment</code>: <small></small></Typography>
-        <Typography sx={{marginLeft: '10px'}}><code>name</code>: <small>{caepi.equipment.name}</small></Typography>
-        <Typography sx={{marginLeft: '10px'}}><code>description</code>: <small>{caepi.equipment.description}</small></Typography>
-        <Typography sx={{marginLeft: '10px'}}><code>brand</code>: <small>{caepi.equipment.brand}</small></Typography>
-        <Typography sx={{marginLeft: '10px'}}><code>color</code>: <small>{caepi.equipment.color}</small></Typography>
-        <Typography sx={{marginLeft: '10px'}}><code>origin</code>: <small>{caepi.equipment.origin}</small></Typography>
-        <Typography sx={{marginLeft: '10px'}}><code>manufacturer</code>: <small>Objeto</small></Typography>
-        <Typography sx={{marginLeft: '20px'}}><code>name</code>: <small>{caepi.equipment.manufacturer.name}</small></Typography>
-        <Typography sx={{marginLeft: '20px'}}><code>cnpj</code>: <small>{caepi.equipment.manufacturer.cnpj}</small></Typography>
-        <Typography><code>report</code>: <small>Objeto</small></Typography>
-        <Typography sx={{marginLeft: '10px'}}><code>standard</code>: <small>{caepi.report.standard}</small></Typography>
-        <Typography sx={{marginLeft: '10px'}}><code>reportNumber</code>: <small>{caepi.report.reportNumber}</small></Typography>
-        <Typography sx={{marginLeft: '10px'}}><code>process</code>: <small>{caepi.report.process}</small></Typography>
-        <Typography sx={{marginLeft: '10px'}}><code>restriction</code>: <small>{caepi.report.restriction}</small></Typography>
-        <Typography sx={{marginLeft: '10px'}}><code>reference</code>: <small>{caepi.report.reference}</small></Typography>
-        <Typography sx={{marginLeft: '10px'}}><code>approvedFor</code>: <small>{caepi.report.approvedFor}</small></Typography>
-        <Typography sx={{marginLeft: '10px'}}><code>observation</code>: <small>{caepi.report.observation}</small></Typography>
-        <Typography sx={{marginLeft: '10px'}}><code>laboratory</code>: <small>Objeto</small></Typography>
-        <Typography sx={{marginLeft: '20px'}}><code>name</code>: <small>{caepi.report.laboratory.name}</small></Typography>
-        <Typography sx={{marginLeft: '20px'}}><code>cnpj</code>: <small>{caepi.report.laboratory.cnpj}</small></Typography>
-        <Typography><code>urls</code>: <small>Array</small></Typography>
-        <Typography sx={{marginLeft: '10px'}}><code>url</code>: <small>{caepi.urls[0].url}</small></Typography>
-        <Typography sx={{marginLeft: '10px'}}><code>description</code>: <small>{caepi.urls[0].description}</small></Typography>
+      <CardContent className="card-api-restful">
+        <span className="card-api-restful-title">API RESTFul</span>
+        <p className="card-api-restful-sub-title">Fornece dados de completos sobre os certificados. API fácil de implementar, com respostas e parâmetros objetivos.</p>
+        <p className="card-api-restful-body-title">Estrutura de dados CAEPI</p>
+        <p className="card-api-restful-body-text">Após o login adicione o Token no header da requisição.</p>
+        <p className="card-api-restful-body-text">{CONFIG.urlBase}/api/v1/caepi/{"{NÚMERO_REGISTRO_CA}"}</p>
+        <p className="card-api-restful-body-text">Protocolo: GET</p>
+        <p className="card-api-restful-body-text">Authorization: Bearer ...Seu Token...</p>
+        
+        <div className="card-api-restful-body">
+          <p>number: {caepi.number}</p>
+          <p>status: {caepi.status}</p>
+          <p>update: {caepi.update}</p>
+          <p>validity: {caepi.validity}</p>
+          <p>equipment: </p>
+          <p>name: {caepi.equipment.name}</p>
+          <p>description: {caepi.equipment.description}</p>
+          <p>brand: {caepi.equipment.brand}</p>
+          <p>color: {caepi.equipment.color}</p>
+          <p>origin: {caepi.equipment.origin}</p>
+          <p>manufacturer: {"Objeto {}"}</p>
+          <p>name: {caepi.equipment.manufacturer.name}</p>
+          <p>cnpj: {caepi.equipment.manufacturer.cnpj}</p>
+          <p>report: {"Objeto {}"}</p>
+          <p>standard: {caepi.report.standard}</p>
+          <p>reportNumber: {caepi.report.reportNumber}</p>
+          <p>process: {caepi.report.process}</p>
+          <p>restriction: {caepi.report.restriction}</p>
+          <p>reference: {caepi.report.reference}</p>
+          <p>approvedFor: {caepi.report.approvedFor}</p>
+          <p>observation: {caepi.report.observation}</p>
+          <p>laboratory: {"Objeto {}"}</p>
+          <p>name: {caepi.report.laboratory.name}</p>
+          <p>cnpj: {caepi.report.laboratory.cnpj}</p>
+          <p>urls: Array</p>
+          <p>url: {caepi.urls[0].url}</p>
+          <p>type: {caepi.urls[0].type}</p>
+          <p>description: {caepi.urls[0].description}</p>
+          <p>parameters: {"Array<String, String>"}</p>
+          <p>parameterName: {caepi.urls[0].parameters[0].nameParameter}</p>
+        </div>
       </CardContent>
     </React.Fragment>
   );

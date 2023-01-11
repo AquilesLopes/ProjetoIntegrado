@@ -1,60 +1,91 @@
 import { IonContent, IonPage } from '@ionic/react';
 import CardSimplePractical from '../components/home/CardSimplePractical';
 import CardInfoApi from '../components/home/CardInfoApi';
-import PolicyIcon from '@mui/icons-material/Policy';
 
-import { scroollById } from '../util/util';
-import { Button, CardContent, Grid, Typography } from '@mui/material';
-import Documentation from '../components/home/documentation/Documentation';
-import GridFindCaepi from '../components/home/find_caepi/GridFindCaepi';
-import { useState } from 'react';
+import { Avatar, Button, CardContent, Grid, Stack, Typography } from '@mui/material';
 import Footer from '../components/home/Footer';
-import InfoDocumentationFull from '../components/home/documentation/InfoDocumentationFull';
-import MenuBar from '../components/home/menu/MenuBar';
+import { useHistory } from 'react-router';
+import { getUserStorage } from '../services/UserStorage';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { getUserState, setUserState } from '../features/userReducer';
+import userAvatar from '../assets/img/user_avatar.png';
+import FindCaepiHome from '../components/home/find_caepi/FindCaepiHome';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import CardContentCaepi from '../components/home/documentation/CardContentCaepi';
+import ExampleCaepi from '../components/home/documentation/ExampleCaepi';
+import { toast } from 'react-toastify';
  
 const PageHome: React.FC = () => {
-  const [loading, setLoading] = useState<boolean>(true);
+  const history = useHistory();
 
-  if(loading){
-    setTimeout(function(){ 
-      if(loading){
-        setLoading(false);
-      }
-    }, 2000);
+  function redirectToPageLogin(){
+    history.push("/login");
+  }
+
+  function redirectToPageRegister(){
+    history.push("/register");
+  }
+
+  function redirectToPageUser(){
+    history.push("/user");
+  }
+
+  function openDocumentation(){
+    toast("Ao clicar o usuário será direcionado para a documentação gerada pelo Swagger.");
+  }
+
+  
+
+  const userStorage = getUserStorage();
+  const user = useAppSelector(getUserState);
+  const dispatch = useAppDispatch();
+
+  if(userStorage.name.length > 0 && user.name.length === 0){
+    dispatch(setUserState(userStorage));
   }
 
   return (
     <IonPage>
       <IonContent className="ion-content" fullscreen>
-          <MenuBar />
           <div className="main-banner">
-              <Grid className={loading ? "fadeout" : "grid fadein"} container spacing={2}>
+              <Grid container spacing={2}>
+                {user.name.length === 0 ?
                   <Grid item xs={12}>
-                      <h2>Verifique a validade do seu</h2>
-                      <h1>Certificado EPI</h1>
+                    <Button className='btn-login' onClick={redirectToPageLogin}
+                            color="warning" variant="contained" size="small">
+                      Login
+                    </Button>
+                    <Button className='btn-new-user'  onClick={redirectToPageRegister}
+                            color="warning" variant="outlined" size="small">
+                      Criar conta
+                    </Button>
+                  </Grid>
+                :
+                  <Stack className="stack-avatar-user" direction="row" 
+                         onClick={redirectToPageUser} spacing={0.5}>
+                    <Avatar alt="" src={user?.image ? user?.image : userAvatar} />
+                    <Typography sx={{color: 'black'}} variant="h6" component="h6">
+                        {user.name}
+                    </Typography>
+                  </Stack>
+                }
+              </Grid>
+              <Grid className='grid-text' container spacing={2}>
+                  <Grid item xs={12}>
+                    <p><span className="color-black">Verifique a validade</span></p>
+                    <p><span className="color-black">do seu</span> <span className="secondary-color bold">Certificado EPI</span></p>
+                  </Grid>
+                  <Grid item xs={12}>
+                      <FindCaepiHome />
                   </Grid>
               </Grid>
-            <div className="footer">
-              <Button className={loading ? "fadeout" : "fadein"} disableElevation onClick={() => scroollById("info-find-caepi")} 
-                      variant="contained" startIcon={<PolicyIcon />}>
-                      Verificar
-              </Button>
-            </div>
           </div>
             
-          <CardContent id="info-find-caepi" sx={{textAlign: 'center'}}>
-            <Typography gutterBottom variant="h5" component="div">
-              APIs para deixar seu produto completo e atualizado
-            </Typography>
-          </CardContent>
-
-          <GridFindCaepi />
-
-          <CardContent sx={{textAlign: 'center', marginTop: '30px'}}>
-            <Typography gutterBottom variant="h5" component="div">
-              Fornecemos dados com os principais indicadores e informações, para deixar sua 
-              aplicação completa, moderna e atualizada.
-            </Typography>
+          <CardContent className="card-info-api">
+            <span>
+              Fornecemos dados com os principais indicadores e informações, <br></br> 
+              para deixar sua aplicação <b>completa</b>, <b>moderna</b> e <b>atualizada</b>.
+            </span>
           </CardContent>
 
           <CardSimplePractical />
@@ -71,9 +102,20 @@ const PageHome: React.FC = () => {
             </Typography>
           </CardContent>
 
-          <Documentation />
+          <CardContentCaepi />
 
-          <InfoDocumentationFull />
+          <ExampleCaepi />
+
+          <CardContent className="footer-info-api">
+            <p>Veja nossa documentação completa</p>
+            <span>Nossa documentação é simples e intuitiva, veja como é simples integrar sua aplicação.</span>
+            <span>Clara, simples e objetiva, feita de desenvolvedor para desenvolvedor.</span>
+
+            <Button className='btn-view-doc-api' onClick={openDocumentation}
+                    variant="contained" size="small">
+              Ver documetação <KeyboardArrowRightIcon />
+            </Button>
+          </CardContent>
 
           <Footer />
       </IonContent>

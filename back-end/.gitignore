@@ -9,8 +9,8 @@ target/
 /src/main/resources/application-test.properties
 /src/main/resources/application.properties
 
-### Base Data ###
-/src/main/resources/tgg_export_caepi.txt
+### Base Data Gov BR txt file ###
+/src/main/resources/templates/tgg_export_caepi.txt
 
 ### STS ###
 .apt_generated

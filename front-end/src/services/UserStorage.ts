@@ -1,4 +1,5 @@
 import { IUser } from "../interface/IUser";
+import { emptyUser } from "../util/util";
 
 export function setUserStorage(user : IUser){
     localStorage.setItem('user', JSON.stringify(user));
@@ -8,16 +9,17 @@ export function removeUserStorage(){
     localStorage.removeItem('user');
 }
 
-export function getUserStorage() : IUser | null{
+export function getUserStorage() : IUser {
     const json = localStorage.getItem('user');
     if(json !== null){ 
         const obj = JSON.parse(json);
         return {
             name: obj.name,
             email: obj.email,
-            lastname: obj.lastname
+            lastname: obj.lastname,
+            image: obj.image
         };
     }else{
-        return null;
+        return emptyUser();
     }
 }

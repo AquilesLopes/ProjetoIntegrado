@@ -1,3 +1,4 @@
+import { IUser } from "../interface/IUser";
 import { removeCaepiStorage } from "../services/CaepiStorage";
 import { removeUserStorage } from "../services/UserStorage";
 
@@ -80,7 +81,7 @@ export const styleModal = {
     width: isMobile ? '98%' : '40%',
     bgcolor: 'background.paper',
     color: '#000',
-    border: '2px solid #000',
+    border: '2px solid #188268',
     boxShadow: 24,
     p: 4,
 };
@@ -98,4 +99,26 @@ export function hasErrosInputs(obj : any){
 export function cleanStorage(){
     removeUserStorage();
     removeCaepiStorage();
+}
+
+export function stringIsDifferent(v1 : any, v2 : any){
+    try{ 
+        const s1 : string = v1.trim();
+        const s2 : string = v2.trim();
+        if(s1 != s2){
+            return true;
+        }
+    } catch (e){
+    }
+    return false;
+}
+
+export function emptyUser(){
+    const user : IUser = {
+        name: '',
+        lastname: '', 
+        email: '',
+        image: ''
+    };
+    return user;
 }

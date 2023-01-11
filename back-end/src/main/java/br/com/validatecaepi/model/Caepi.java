@@ -3,11 +3,13 @@ package br.com.validatecaepi.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Document(collection="caepi")
-public class Caepi {
+public class Caepi implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     private String id;
