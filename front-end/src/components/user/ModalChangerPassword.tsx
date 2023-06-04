@@ -20,7 +20,7 @@ export default function ModalChangerPassword(arg : any) {
             <Box sx={styleModal}>
               <FormChangePasswordUser setOpen={arg.setOpen} />
             </Box>
-        </Modal>
+        </Modal> 
     </React.Fragment>
   );
 }

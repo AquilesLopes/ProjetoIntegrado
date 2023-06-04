@@ -5,9 +5,10 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getUserState, setUserState } from '../../features/userReducer';
 import { IUser } from '../../interface/IUser';
-import { setUserStorage } from '../../services/UserStorage';
+import { getUserStorage, setUserStorage } from '../../services/UserStorage';
 import { toast } from 'react-toastify';
 import { squareAndResizeImage } from '../../services/ImageService';
+import { updateIconImage64 } from '../../services/UserService';
 
 export default function ModalChangerImageUser(arg : any) {
   const [imageValid, setImageValid] = React.useState(true);
@@ -37,7 +38,7 @@ export default function ModalChangerImageUser(arg : any) {
       const idToast = toast.loading("Enviando...");
       var file = e.target.files[0];
       var reader = new FileReader();
-      var baseString;
+      var baseString;  
       
       reader.onloadend = function () {
           baseString = reader.result;
@@ -54,23 +55,37 @@ export default function ModalChangerImageUser(arg : any) {
       squareAndResizeImage(imageBase64, 200, 200)
       .then((imgResize) : any => {
 
-          const newUser : IUser = {
-            name: user.name,
-            lastname: user.lastname,
-            email: user.email,
-            image: imgResize + ""
-          } 
+          const userStorage = getUserStorage();
           
-          setUserStorage(newUser);
-          dispatch(setUserState(newUser));
-      
-          toast.update(idToast, {
-            render: "Atualizado com sucesso!", 
-            type: "success", 
-            isLoading: false, 
-            autoClose: 1500}
-          );
+          updateIconImage64(imgResize + "").then((res : any) => {
+                if(res.status === 200){
+                  const newUser : IUser = {
+                        firstname: user.firstname,
+                        lastname: user.lastname,
+                        email: user.email,
+                        iconImage64: imgResize + "",
+                        token: userStorage.token
+                  }
 
+                  setUserStorage(newUser);
+                  dispatch(setUserState(newUser));
+
+                  toast.update(idToast, {
+                    render: "Atualizado com sucesso!", 
+                    type: "success", 
+                    isLoading: false, 
+                    autoClose: 1500}
+                  );
+              }else {
+                toast.update(idToast, {
+                  render: "Erro ao tentar atualizar imagem!", 
+                  type: "error", 
+                  isLoading: false, 
+                  autoClose: 1500}
+                );
+              }
+          });
+          
       });
 
   }

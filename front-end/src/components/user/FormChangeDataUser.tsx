@@ -4,15 +4,16 @@ import { Button, CardContent, TextField } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { Formik } from 'formik';
-import { setUserStorage } from '../../services/UserStorage';
+import { getUserStorage, setUserStorage } from '../../services/UserStorage';
 import { hasErrosInputs, stringIsDifferent } from '../../util/util';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getUserState, setUserState } from '../../features/userReducer';
 import { IUser } from '../../interface/IUser';
+import { updateUserLogged } from '../../services/UserService';
 
 interface IFormRegister {
-  name: string,
+  firstname: string,
   lastname: string,
   email: string,
 }
@@ -51,7 +52,7 @@ export default function FormChangeDataUser(arg : any) {
   const dispatch = useAppDispatch();
 
   const initialValues : IFormRegister = {
-    name: user !== undefined ? user.name : '',
+    firstname: user !== undefined ? user.firstname : '',
     lastname: user !== undefined ? user.lastname : '',
     email: user !== undefined ? user.email : '',
   }
@@ -61,12 +62,12 @@ export default function FormChangeDataUser(arg : any) {
       <Formik
         initialValues={initialValues}
         validate={values => {
-          const errors = {name: "", lastname: "", email: "", password: "", passwordConfirmation: ""};
-          errors.name = validateString(values.name);
+          const errors = {firstname: "", lastname: "", email: "", password: "", passwordConfirmation: ""};
+          errors.firstname = validateString(values.firstname);
           errors.lastname = validateString(values.lastname);
           errors.email = validateEmail(values.email);
 
-          if(stringIsDifferent(values.name, user?.name)
+          if(stringIsDifferent(values.firstname, user?.firstname)
             || stringIsDifferent(values.lastname, user?.lastname)
             || stringIsDifferent(values.email, user?.email)){
             setFormChanged(true);
@@ -84,24 +85,37 @@ export default function FormChangeDataUser(arg : any) {
         onSubmit={(values, { setSubmitting }) => {
           arg.setOpen(false);
           const idToast = toast.loading("Enviando...");
-          const userChanged : IUser = {
-              name: values.name,
-              lastname: values.lastname,
-              email: values.email,
-              image: user.image
-          }
-          setTimeout(() => {
-            setUserStorage(userChanged);
-            dispatch(setUserState(userChanged));
-            setSubmitting(false);
 
-            toast.update(idToast, {
-              render: "Atualizado com sucesso!", 
-              type: "success", 
-              isLoading: false, 
-              autoClose: 1500}
-            );
-          }, 2000);
+          updateUserLogged(values.firstname, values.lastname, values.email)
+          .then((res : any) => {
+              setSubmitting(false);
+              if(res.status === 200){
+                  arg.setOpen(false);
+                  const userStorage = getUserStorage();
+                  const userChanged : IUser = {
+                      firstname: values.firstname,
+                      lastname: values.lastname,
+                      email: values.email,
+                      iconImage64: userStorage.iconImage64,
+                      token: userStorage.token
+                  }
+                  setUserStorage(userChanged);
+                  dispatch(setUserState(userChanged));
+                  toast.update(idToast, {
+                    render: "Atualizado com sucesso!", 
+                    type: "success", 
+                    isLoading: false, 
+                    autoClose: 1500}
+                  );
+              }else {
+                  toast.update(idToast, {
+                    render: "Erro ao tentar atualizar dados!", 
+                    type: "error", 
+                    isLoading: false, 
+                    autoClose: 1500}
+                  );
+              }
+          });
         }}
       >
       {({
@@ -116,10 +130,10 @@ export default function FormChangeDataUser(arg : any) {
         <form onSubmit={handleSubmit}>
           <CardContent className="card-content-form">
             <TextField fullWidth type="text" onChange={handleChange} 
-                       onBlur={handleBlur} id="name" autoComplete='off'
-                       error={touched.name && hasErros(errors.name)} 
-                       helperText={touched.name && errors.name}
-                       value={values.name} label="Nome" variant="outlined" />
+                       onBlur={handleBlur} id="firstname" autoComplete='off'
+                       error={touched.firstname && hasErros(errors.firstname)} 
+                       helperText={touched.firstname && errors.firstname}
+                       value={values.firstname} label="Primeiro nome" variant="outlined" />
             <TextField fullWidth type="text" onChange={handleChange} 
                        onBlur={handleBlur} id="lastname" autoComplete='off'
                        error={touched.lastname && hasErros(errors.lastname)} 

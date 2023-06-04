@@ -1,17 +1,14 @@
 import * as React from 'react';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import LabelImportantIcon from '@mui/icons-material/LabelImportant';
-import ListItemText from '@mui/material/ListItemText';
-import { CardContent, Grid, List, ListItem, Typography } from '@mui/material';
+import { CardContent, List } from '@mui/material';
 import man_pc from '../../assets/img/man_pc.png';
 import vector from '../../assets/img/vector.svg';
-import { isMobile } from '../../util/util';
 
 const itens = [
   {id: 1, description: 'Pesquise certificados por qualquer número de registro;'},
   {id: 2, description: 'Liste paginação filtrando por fabricante ou laboratório;'},
   {id: 3, description: 'Integre com sua aplicação através de nossa API-Restful;'},
-  {id: 4, description: 'Identifique facilmente o status, a validade e o relatório do equipamento.'},
+  {id: 4, description: 'Identifique facilmente o status, a validade e o relatório do equipamento;'},
+  {id: 5, description: 'Receba alertas automatizados de vencimento de certificados.'}
 ]
 
 export default function CardSimplePractical() {

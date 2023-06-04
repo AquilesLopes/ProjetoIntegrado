@@ -7,6 +7,7 @@
 @import './page_user';
 @import './page_register';
 @import './page_login';
+@import './page_find_caepi';
 @import './footer';
 @import './card_api_restful';
 
@@ -18,44 +19,42 @@
     font-size: 1rem;
 }
 
-/* Works on Firefox */
-* {
-    scrollbar-width: thin; 
-    scrollbar-color: #27405e white;
-}
-    
-/* Works on Chrome, Edge, and Safari */
-*::-webkit-scrollbar {
-    width: 3px;
-}
-    
-*::-webkit-scrollbar-track {
-    background: white;
-}
-    
-*::-webkit-scrollbar-thumb {
-    background-color: #27405e;
-    border-radius: 0px;
-}
-
 a {
     text-decoration: none;
 }
 
-code {
-    color: rgb(255, 0, 43);
-}
+
 
 ion-title {
     margin-left: 10px;
 }
 
-
-
 .title-page {
     margin-left: 20px;
     font-size: 2rem;
     margin-top: 0.5rem;
+}
+
+.ion-toolbar-page {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    padding: 8px;
+    background-color: $ligth-color;
+
+    .ion-toolbar-page-left {
+        display: flex;
+        flex-flow: row;
+        justify-content: flex-start;
+    }
+
+    .ion-toolbar-page-rigth {
+        padding-top: 5px;
+    }
+}
+
+.stack-avatar-user {
+    cursor: pointer;
 }
 
 .ion-header {
@@ -85,7 +84,14 @@ ion-title {
 
 .card {
     margin: 10px;
+
+    @include mobile {
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+        padding: 0px !important;
+    }
 }
+
 
 .grid-img {
     display: flex;

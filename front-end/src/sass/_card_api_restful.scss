@@ -11,12 +11,29 @@
     margin-right: 60px;
 }
 
+.info-status-caepi {
+    margin-top: 20px;
+    font-size: 8px;
+    font-weight: 300;
+}
+
 .card-api-restful {
     margin-left: 60px;
 
+    &-text-code {
+        font-size: 14px;
+        font-weight: bold;
+    }
+
     @include mobile {
         margin-left: 5px;
+
+        &-text-code {
+            font-size: 12px;
+            font-weight: bold;
+        }
     }
+
 
     &-title {
         color: $secondary-color;
@@ -34,24 +51,37 @@
 
     &-body {
         margin-top: 20px;
-        background-color: #F5F5F5;
+        background-color: #FAFAFA;
         padding: 40px;
-        font-weight: 300;
-        font-size: 15px;
-        color: $text-color;
+        overflow-x: hidden;
 
-        p {
-            font-weight: 300;
-            font-size: 15px;
-            color: $text-color;
+        &-modal {
+            padding: 10px;
+            margin-top: 0px;
+
+            @include mobile {
+                padding: 5px;
+            }
+        }
+        
+        @include mobile {
+            padding: 0px;
+            width: 99%;
+
+            span {
+                overflow: hidden;
+                font-size: 12px;
+            }
+
+            code {
+                overflow: hidden;
+                font-size: 12px;
+            }
         }
 
-        @include mobile {
-            padding: 5px;
-            font-size: 12px;
-
-            p {
-                font-size: 12px;
+        pre {
+            &::-webkit-scrollbar {
+                display: none; 
             }
         }
     }

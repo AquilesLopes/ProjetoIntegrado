@@ -13,7 +13,7 @@ const PageLogin: React.FC = () => {
           <Grid container className="grid-login" spacing={{ xs: 1, md: 4}}>
             <Grid item xs={12} md={4}>
               <div className="card glass-effect">
-                <Typography sx={{textAlign: 'center', color: 'black', marginTop: 2}} variant="h3" component="h3">
+                <Typography className="title-form" variant="h4" component="h4">
                   <PolicyIcon fontSize="inherit" color="success" /> {CONFIG.nameSystem}
                 </Typography>
                 <FormLogin />

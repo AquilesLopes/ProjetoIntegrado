@@ -12,8 +12,8 @@ export default function Footer() {
     const targetValue = isMobile ? '_self' : '_blank';
 
     const conf = {
-        site: CONFIG.urlBase.replaceAll('https://', ''),
-        siteLink: CONFIG.urlBase,
+        site: CONFIG.site.replaceAll('https://', ''),
+        siteLink: CONFIG.site,
         
         email: CONFIG.email,
         emailLink: 'mailto:' + CONFIG.email,
@@ -51,7 +51,7 @@ export default function Footer() {
         <footer id="main-contact">
             <div className="footer-container">
                 <div className="footer-desc-container">
-                    <h3 className="footer-title">{CONFIG.nameSystem}</h3>
+                    <p className="footer-title">{CONFIG.nameSystem}</p>
                     <p>
                         Code licensed 
                         <a href={CONFIG.license.url} target="_blank">

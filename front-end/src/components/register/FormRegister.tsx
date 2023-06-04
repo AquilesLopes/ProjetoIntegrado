@@ -12,9 +12,13 @@ import { hasErrosInputs } from '../../util/util';
 import { toast } from 'react-toastify';
 import { setUserState } from '../../features/userReducer';
 import { useAppDispatch } from '../../app/hooks';
+import { IUser } from '../../interface/IUser';
+import { createUser } from '../../services/UserService';
+import { error } from 'console';
+import { AxiosResponse } from 'axios';
 
 interface IFormRegister {
-  name: string,
+  firstname: string,
   lastname: string,
   email: string,
   password: string,
@@ -22,7 +26,7 @@ interface IFormRegister {
 }
 
 const initialValues : IFormRegister = {
-  name: "",
+  firstname: "",
   lastname: "",
   email: "",
   password: "",
@@ -47,6 +51,20 @@ function validateString(value : string){
   } else {
     return '';
   }
+}
+
+function validateLastName(string: string): string {
+  var error : string = validateString(string);
+
+  if(error.length === 0){
+    const trimmedString = string.trim();
+    const words = trimmedString.split(' ');
+    if(words.length < 2){
+      error = 'Informe o sobrenome completo!';
+    }
+  }
+
+  return error;
 }
 
 function validatePassword(value : string){
@@ -90,9 +108,9 @@ export default function FormRegister() {
       <Formik
         initialValues={initialValues}
         validate={values => {
-          const errors = {name: "", lastname: "", email: "", password: "", passwordConfirmation: ""};
-          errors.name = validateString(values.name);
-          errors.lastname = validateString(values.lastname);
+          const errors = {firstname: "", lastname: "", email: "", password: "", passwordConfirmation: ""};
+          errors.firstname = validateString(values.firstname);
+          errors.lastname = validateLastName(values.lastname);
           errors.email = validateEmail(values.email);
           errors.password = validatePassword(values.password);
 
@@ -109,25 +127,56 @@ export default function FormRegister() {
           const idToast = toast.loading("Enviando...");
           setTimeout(() => {
 
-            const userLoged = {
-              name: values.name,
+            const newUser : IUser = {
+              firstname: values.firstname,
               lastname: values.lastname,
-              email: values.email
+              email: values.email,
+              password: values.password
             }
 
-            setUserStorage(userLoged);
-            dispatch(setUserState(userLoged));
+            createUser(newUser).then((resp : AxiosResponse) => {
+              if(resp.request.status === 200){
+                  history.push("/login");
 
-            toast.update(idToast, {
-              render: "Cadastrado com sucesso!", 
-              type: "success", 
-              isLoading: false, 
-              autoClose: 1500}
-            );
+                  toast.update(idToast, {
+                    render: "Cadastrado com sucesso!", 
+                    type: "success", 
+                    isLoading: false, 
+                    autoClose: 1500}
+                  );
+              }else if(resp.request.status === 400){
+                toast.update(idToast, {
+                  render: "E-mail já cadastrado!", 
+                  type: "error", 
+                  isLoading: false, 
+                  autoClose: 1500}
+                );
+              }else if(resp.request.status === 422){
+                toast.update(idToast, {
+                  render: "Verifique os seus dados e tenta novamente!", 
+                  type: "error", 
+                  isLoading: false, 
+                  autoClose: 1500}
+                );
+              }else {
+                toast.update(idToast, {
+                  render: "Error ao tentar registrar, por favor, tente mais tarde!", 
+                  type: "error", 
+                  isLoading: false, 
+                  autoClose: 1500}
+                );
+              }
+            }).catch(error => {
+              toast.update(idToast, {
+                render: "Error ao tentar registrar, por favor, tente mais tarde!", 
+                type: "error", 
+                isLoading: false, 
+                autoClose: 1500}
+              );
+            });
 
             setSubmitting(false);
-            history.push("/user");
-          }, 2000);
+          }, 1000);
         }}
       >
       {({
@@ -142,10 +191,10 @@ export default function FormRegister() {
         <form onSubmit={handleSubmit}>
           <CardContent className="card-content-form">
             <TextField fullWidth type="text" onChange={handleChange} 
-                       onBlur={handleBlur} id="name" autoComplete='off'
-                       error={touched.name && hasErros(errors.name)} 
-                       helperText={touched.name && errors.name}
-                       value={values.name} label="Nome" variant="outlined" />
+                       onBlur={handleBlur} id="firstname" autoComplete='off'
+                       error={touched.firstname && hasErros(errors.firstname)} 
+                       helperText={touched.firstname && errors.firstname}
+                       value={values.firstname} label="Primeiro nome" variant="outlined" />
             <TextField fullWidth type="text" onChange={handleChange} 
                        onBlur={handleBlur} id="lastname" autoComplete='off'
                        error={touched.lastname && hasErros(errors.lastname)} 
@@ -215,7 +264,7 @@ export default function FormRegister() {
           </CardContent>
 
           <Box className="box-btn-form" >
-              <Button sx={{margin: '10px'}} onClick={exitSystem} variant="contained" color="error">
+              <Button sx={{margin: '10px'}} onClick={exitSystem} variant="outlined" color="error">
                 <CancelIcon sx={{marginRight: '5px'}} /> Cancelar 
               </Button>
               <Button sx={{margin: '10px'}} disabled={isSubmitting} type="submit" 

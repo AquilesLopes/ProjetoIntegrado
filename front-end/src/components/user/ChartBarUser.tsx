@@ -1,9 +1,8 @@
 import { Chart } from "react-google-charts";
-import { isMobile } from "../../util/util";
 
 export const data = [
-  ["", "Limite", "Realizadas"],
-  ["Hoje", 500, 278],
+  ["", "Limite", "Realizadas", "Disponíveis"],
+  [" ", 500, 278, 222],
 ];
 
 export const options = {
@@ -11,7 +10,8 @@ export const options = {
     title: "",
     subtitle: "",
   },
-  height: 150,
+  colors: ['#188268', '#DB4437', '#4441c8'],  
+  height: 100,
   legend: { position: "top" },
   hAxis: {
     title: "",
@@ -20,7 +20,7 @@ export const options = {
   vAxis: {
     title: "",
   },
-  bars:  "vertical",
+  bars:  "horizontal",
   animation:{
     duration: 1000,
     easing: 'out',
@@ -29,10 +29,10 @@ export const options = {
 
 const ChartBarUser: React.FC = () => {
   return (
-    <Chart 
+    <Chart
       chartType="Bar"
-      width={isMobile ? "100%" : "80%"}
-      height="200px"
+      width="100%"
+      height="100px"
       data={data}
       options={options}
     />

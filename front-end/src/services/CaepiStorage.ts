@@ -1,33 +1,42 @@
-import ICaepi from "../interface/ICaepi";
+import { ISearch } from "../interface/ISearch";
+import { sortJSON } from "../util/util";
 
-export function setCaepiStorage(caepi : ICaepi){
-    var json = getCaepiStorage();
-    var json = removeCaepiArray(json, caepi);
+export function setCaepiStorage(search : ISearch){
+    var jsonArray = getCaepiStorage();
+    var listSearch : ISearch[] = getCaepiStorage();
+
+    for(var i = 0; i < jsonArray.length; i++){
+        listSearch = removeCaepiArray(listSearch, search);
+    }
     
-    if(json.length >= 5){
-        json.shift();
+    if(listSearch.length >= 5){
+        listSearch.shift();
     }
 
-    json.push(caepi);
-    json.reverse();
-    localStorage.setItem('caepi', JSON.stringify(json));
+    listSearch.push(search);
+    sortJSON(listSearch, 'time', '321');
+    localStorage.setItem('search', JSON.stringify(listSearch));
 }
 
-export function getCaepiStorage() : ICaepi[]{
-    var jsonString = localStorage.getItem('caepi');
+export function getCaepiStorage() : ISearch[]{
+    var jsonString = localStorage.getItem('search');
     jsonString = jsonString === null ? '[]' : jsonString;
     var obj = JSON.parse(jsonString);
     return Array.isArray(obj) ? obj : [];
 }
 
 export function removeCaepiStorage(){
-    localStorage.removeItem('caepi');
+    localStorage.removeItem('search');
 }
 
-function removeCaepiArray(array : ICaepi[], caepi : ICaepi){
+function removeCaepiArray(array : ISearch[], search : ISearch){
     var index = -1;
     for(var i = 0; i < array.length; i++){
-        if(array[i].number === caepi.number){
+        if(search.type === 'number' && array[i].number === search.number){
+            index = i;
+        }else if(search.type === 'laboratory' && array[i].cnpj === search.cnpj){
+            index = i;
+        }else if(search.type === 'manufacturer' && array[i].cnpj === search.cnpj){
             index = i;
         }
     }

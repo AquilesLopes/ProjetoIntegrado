@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
-import ICaepi from '../interface/ICaepi';
+import { ISearch } from '../interface/ISearch';
 
 export interface IHistoricCaepiState {
-  value: ICaepi[];
+  value: ISearch[];
   status: 'idle' | 'loading' | 'failed';
 }
 
@@ -16,7 +16,7 @@ export const historicCaepiSlice = createSlice({
   name: 'Historic CAEPI Slice',
   initialState,
   reducers: {
-    setHistoricCaepiState: (state, action: PayloadAction<ICaepi[]>) => {
+    setHistoricCaepiState: (state, action: PayloadAction<ISearch[]>) => {
       state.value = action.payload;
     },
   },

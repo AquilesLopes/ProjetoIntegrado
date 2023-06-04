@@ -13,3 +13,5 @@ export default function CNPJformat(cnpj: unknown): boolean {
 
   return validateCNPJ(cnpj);
 }
+
+

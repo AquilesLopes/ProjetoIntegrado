@@ -4,6 +4,13 @@
     background-size: cover;
     background-position: center;
     height: 100vh;
+
+    .title-form {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 1rem;
+    }
 }
 
 .grid-register {

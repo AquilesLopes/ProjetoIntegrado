@@ -8,14 +8,17 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { hasErrosInputs } from '../../util/util';
 import { toast } from 'react-toastify';
+import { updatePassword } from '../../services/UserService';
 
 interface IFormRegister {
-  password: string,
+  oldPassword: string,
+  newPassword: string,
   passwordConfirmation: string,
 }
 
 const initialValues : IFormRegister = {
-  password: "",
+  oldPassword: "",
+  newPassword: "",
   passwordConfirmation: ""
 }
 
@@ -39,11 +42,16 @@ function hasErros(value : string | undefined){
 
 export default function FormChangePasswordUser(arg : any) {
   const [formValid, setFormValid] = React.useState(false);
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [showOldPassword, setShowOldPassword] = React.useState(false);
+  const [showNewPassword, setShowNewPassword] = React.useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] = React.useState(false);
 
-  function handleChangeShowPassword(){
-    setShowPassword(showPassword ? false : true);
+  function handleChangeShowOldPassword(){
+    setShowOldPassword(showOldPassword ? false : true);
+  }
+
+  function handleChangeShowNewPassword(){
+    setShowNewPassword(showNewPassword ? false : true);
   }
 
   function handleChangeShowPasswordConfirmation(){
@@ -55,10 +63,11 @@ export default function FormChangePasswordUser(arg : any) {
       <Formik
         initialValues={initialValues}
         validate={values => {
-          const errors = {name: "", lastname: "", email: "", password: "", passwordConfirmation: ""};
-          errors.password = validatePassword(values.password);
+          const errors = {oldPassword: "", newPassword: "", passwordConfirmation: ""};
+          errors.oldPassword = validatePassword(values.oldPassword);
+          errors.newPassword = validatePassword(values.newPassword);
 
-          if(errors.password.length === 0 && values.passwordConfirmation !== values.password){
+          if(errors.newPassword.length === 0 && values.passwordConfirmation !== values.newPassword){
              errors.passwordConfirmation = "A confirmação de senha deve ser igual a senha";
           }else{
             errors.passwordConfirmation = "";
@@ -73,20 +82,36 @@ export default function FormChangePasswordUser(arg : any) {
           return hasErrosInputs(errors) ? errors : {};
         }}
 
-        onSubmit={(values, { setSubmitting }) => {
-          arg.setOpen(false);
+        onSubmit={(values, actions) => {
           const idToast = toast.loading("Enviando...");
-          setTimeout(() => {
 
-            toast.update(idToast, {
-              render: "Senha alterada com sucesso!", 
-              type: "success", 
-              isLoading: false, 
-              autoClose: 1500}
-            );
-
-            setSubmitting(false);
-          }, 2000);
+          updatePassword(values.oldPassword, values.newPassword)
+          .then((res : any) => {
+              actions.setSubmitting(false);
+              if(res.status === 200){
+                arg.setOpen(false);
+                toast.update(idToast, {
+                  render: "Senha alterada com sucesso!", 
+                  type: "success", 
+                  isLoading: false, 
+                  autoClose: 1500}
+                );
+              }else {
+                toast.update(idToast, {
+                  render: "Erro ao tentar alterar a senha!", 
+                  type: "error", 
+                  isLoading: false, 
+                  autoClose: 1500}
+                );
+                const errors = {
+                  oldPassword: "A senha atual é inválida!", 
+                  newPassword: "",
+                  passwordConfirmation: ""
+                };
+                actions.setErrors(errors);
+              }
+          });
+            
         }}
       >
       {({
@@ -101,42 +126,70 @@ export default function FormChangePasswordUser(arg : any) {
         <form onSubmit={handleSubmit}>
           <CardContent className="card-content-form">
             <FormControl fullWidth variant="outlined">
-              <InputLabel error={touched.password && hasErros(errors.password)}  
-                          htmlFor="password">Senha</InputLabel>
+              <InputLabel error={touched.oldPassword && hasErros(errors.oldPassword)}  
+                          htmlFor="password">Senha atual</InputLabel>
               <OutlinedInput
-                  id="password"
+                  id="oldPassword"
                   fullWidth
-                  type={showPassword ? 'text' : 'password'}
-                  value={values.password}
-                  label="Senha"
+                  type={showOldPassword ? 'text' : 'password'}
+                  value={values.oldPassword}
+                  label="Senha atual"
                   onChange={handleChange} onBlur={handleBlur}
-                  error={touched.password && hasErros(errors.password)} 
+                  error={touched.oldPassword && hasErros(errors.oldPassword)} 
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
                         aria-label="toggle password visibility"
-                        onClick={handleChangeShowPassword}
-                        onMouseDown={handleChangeShowPassword}
+                        onClick={handleChangeShowOldPassword}
+                        onMouseDown={handleChangeShowOldPassword}
                         edge="end"
                       >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                        {showOldPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
                     </InputAdornment>
                   }
               />
               <FormHelperText error id="password-error">
-                {errors.password}
+                {errors.newPassword}
+              </FormHelperText>
+            </FormControl>
+            <FormControl fullWidth variant="outlined">
+              <InputLabel error={touched.newPassword && hasErros(errors.newPassword)}  
+                          htmlFor="password">Nova senha</InputLabel>
+              <OutlinedInput
+                  id="newPassword"
+                  fullWidth
+                  type={showNewPassword ? 'text' : 'password'}
+                  value={values.newPassword}
+                  label="Nova senha"
+                  onChange={handleChange} onBlur={handleBlur}
+                  error={touched.newPassword && hasErros(errors.newPassword)} 
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleChangeShowNewPassword}
+                        onMouseDown={handleChangeShowNewPassword}
+                        edge="end"
+                      >
+                        {showNewPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+              />
+              <FormHelperText error id="password-error">
+                {errors.newPassword}
               </FormHelperText>
             </FormControl>
             <FormControl fullWidth variant="outlined">
               <InputLabel error={touched.passwordConfirmation && hasErros(errors.passwordConfirmation)}  
-                          htmlFor="passwordConfirmation">Confirmação de Senha</InputLabel>
+                          htmlFor="passwordConfirmation">Confirmação de senha</InputLabel>
               <OutlinedInput
                   id="passwordConfirmation"
                   fullWidth
                   type={showPasswordConfirmation ? 'text' : 'password'}
                   value={values.passwordConfirmation}
-                  label="Confirmação de Senha"
+                  label="Confirmação de senha"
                   onChange={handleChange} onBlur={handleBlur}
                   error={touched.passwordConfirmation && hasErros(errors.passwordConfirmation)} 
                   endAdornment={

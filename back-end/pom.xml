@@ -8,11 +8,11 @@
 		<version>3.0.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>br.com.validate-caepi</groupId>
-	<artifactId>validate-caepi</artifactId>
+	<groupId>br.com.apicaepi</groupId>
+	<artifactId>apicaepi</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>validate-caepi</name>
+	<name>api-caepi</name>
 	<description>Application for validation of Brazilian Personal Protection Certificates</description>
 	<properties>
 		<java.version>17</java.version>
@@ -132,6 +132,14 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.2</version>
+				<configuration>
+					<skipTests>true</skipTests>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

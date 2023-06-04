@@ -1,13 +1,20 @@
 import { Box, CircularProgress, Divider, IconButton, InputBase, Modal, Paper, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Validator from "../../../services/Validator";
 import SearchIcon from '@mui/icons-material/Search';
 
 import { toast } from "react-toastify";
-import { caepiValid, formatDate, formatDateTime, styleModal } from "../../../util/util";
+import { caepiValid, formatDate, formatDateTime, isValidNumberCaepi, styleModal } from "../../../util/util";
 import { caepiEmpty } from "../../../mock/caepi_empty";
 import ICaepi from "../../../interface/ICaepi";
-import { caepiMocks } from "../../../mock/caepi_mocks";
+import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
+import React from "react";
+import { simpleFindCaepiByNumber } from "../../../services/CaepiService";
+
+type Response = {
+    status: number;
+    data: ICaepi;
+}
 
 export default function FindCaepiHome() {
     const [open, setOpen] = useState(false);
@@ -15,6 +22,7 @@ export default function FindCaepiHome() {
     const [loading, setLoading] = useState<boolean>(false);
     const [caepi, setCaepi] = useState<ICaepi>(caepiEmpty);
     const [error, setError] = useState("");
+    const [boxShadow, setBoxShadow] = useState("paper-search");
 
     const validate = (ev: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         var valueStr = ev.currentTarget.value;
@@ -23,16 +31,16 @@ export default function FindCaepiHome() {
         if(valueStr.length > 0){
             try{
                 valueStr = Validator.getNumbers(valueStr);
-                let value = parseInt(valueStr, 10);
-                setNumber(value);
+                let numberCaepi = parseInt(valueStr, 10);
+                setNumber(numberCaepi);
                 
-                if (value > 1000){
+                if (isValidNumberCaepi(numberCaepi)){
                     setError('');
                 }else {
                     setError(`* Número de registro inválido!`);
                 }
             } catch(e){
-                setError(`* Número de registro inválido!`);
+                setError('');
             }
         }else{
             setError('');
@@ -40,43 +48,72 @@ export default function FindCaepiHome() {
     };
 
     function findCaepiByNumber(){
-        if (number > 1000){
+        if (isValidNumberCaepi(number)){
+            setError('');
             toast("Pesquisando...", { autoClose: 800 });
             setLoading(true);
             setTimeout(function(){ 
-                var status = 404;
-                caepiMocks.content.map((c : ICaepi) => {
-                    if(c.number === number){
-                        setCaepi(c);
-                        status = 200;
+                simpleFindCaepiByNumber(number).then((resp : Response) => {
+                    try {
+                        if(resp.status === 200){
+                            setCaepi(resp.data);
+                            setOpen(true);
+                        }else {
+                            setError(`* Registro ${number} não encontrado!`);
+                        }
+                    } catch (error) {
+                        setError(`* Registro ${number} não encontrado!`);
                     }
-                });
-                if(status === 200){
-                    setOpen(true);
-                }else if(status === 404){
+                    setLoading(false);
+                }).catch(error => {
                     setError(`* Registro ${number} não encontrado!`);
-                }else{
-                    setError(`* Número de registro inválido!`);
-                }
-                setLoading(false);
+                    setLoading(false);
+                })
             }, 1000);
+        } else {
+            setError(`* Informe um número de registro válido!`);
+        }
+    }
+
+    function cleanFormSearchCaepi(){
+        setError('');
+        setNumber(0);
+    }
+
+    function handleBoxShadow(focus : boolean){
+        if(error.length > 0){
+            setBoxShadow("paper-search paper-search-error");
+        }else if(focus){
+            setBoxShadow("paper-search paper-search-success");
+        }else {
+            setBoxShadow("paper-search");
         }
     }
 
     return (
         <>
-            <form onSubmit={findCaepiByNumber}>
-                <Paper className="paper-search" component="div"
+            <form onSubmit={e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }}>
+                <Paper component="div" className={boxShadow}
                     sx={{ p: '2px 4px', display: 'flex', alignItems: 'center' }}
                     >
-                    <InputBase
-                        sx={{ ml: 1, flex: 1 }}
-                        type="tel" onChange={(event) => validate(event)}
-                        placeholder="Número de registro" error={true} value={number > 0 ? number : ''}
+                    <InputBase type="tel" onChange={(event) => validate(event)}
+                        sx={{ ml: 1, flex: 1}} onFocus={() => handleBoxShadow(true)}
+                        autoCorrect="off" autoComplete="off" onBlur={() => handleBoxShadow(false)}
+                        placeholder="Número de registro" value={number > 0 ? number : ''}
                         inputProps={{ 'aria-label': 'search CAEPI by register number' }}
                     />
+                    {number > 0 && !loading ?
+                    <IconButton onClick={cleanFormSearchCaepi} 
+                                type="button" sx={{ p: '6px' }} aria-label="search">
+                        <DeleteSweepIcon />
+                    </IconButton>
+                    : <></>}
                     <IconButton onClick={findCaepiByNumber} disabled={loading}
-                        className="btn-search" type="submit" aria-label="search">
+                        className={error.length > 0 ? "btn-search btn-search-error" : "btn-search"}
+                        type="submit" aria-label="search">
                         {loading ? <CircularProgress size={22} color="success" />
                         : <><SearchIcon /> <span>Verificar</span></>
                         }
@@ -84,7 +121,6 @@ export default function FindCaepiHome() {
                 </Paper>
             </form>
             {error.length > 0 ? <p className="msg-error">{error}</p> : ''}
-            <p className="msg-info">* Teste com 47504 ou 47460, esta msg será removida na versão de produção.</p>
             <Modal
                 open={open}
                 onClose={() => setOpen(false)}
@@ -107,7 +143,7 @@ export default function FindCaepiHome() {
                 </Typography>
                 <Divider light sx={{marginTop: '5px', marginBottom: '5px'}} />
                 <Typography component="p">
-                    <small>Logue no sistema para visualizar o detalhamento completo.</small> 
+                    <small>Acesse a área do usuário para visualizar o detalhamento completo.</small> 
                 </Typography>  
                 </Box>
             </Modal>

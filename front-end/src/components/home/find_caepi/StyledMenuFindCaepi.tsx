@@ -4,12 +4,20 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { IOptionFind } from '../../../interface/IOptionFind';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { getSearchState, setSearchState } from '../../../features/searchStateReducer';
+import { ISearch } from '../../../interface/ISearch';
+import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 
 const ITEM_HEIGHT = 48;
 
 export default function StyledMenuFindCaepi(data: any) {
+  const dispatch = useAppDispatch();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
+  const searchCaepi = useAppSelector(getSearchState);
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -18,9 +26,16 @@ export default function StyledMenuFindCaepi(data: any) {
   };
 
   function changeOption(option: IOptionFind){
-    if(option.id !== data.option.id){
-        data.setOption(option);
+
+    const search : ISearch = {
+        type: option.code,
+        cnpj: '',
+        number: 0,
+        color: '', 
+        time: 0
     }
+
+    dispatch(setSearchState(search));
     setAnchorEl(null);
   }
 
@@ -34,7 +49,7 @@ export default function StyledMenuFindCaepi(data: any) {
         aria-haspopup="true"
         onClick={handleClick}
       >
-        <MoreVertIcon />
+        <MenuOpenIcon />
       </IconButton>
       <Menu
         id="long-menu"
@@ -53,7 +68,7 @@ export default function StyledMenuFindCaepi(data: any) {
       >
         {data.options.map((option: IOptionFind) => (
           <MenuItem key={option.id} 
-            selected={option.id === data.option.id} onClick={() => changeOption(option)}>
+            selected={searchCaepi.type === option.code} onClick={() => changeOption(option)}>
             {option.name}
           </MenuItem>
         ))}

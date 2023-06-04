@@ -1,13 +1,15 @@
 import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { Avatar, Card, CardContent, Grid, Stack, Typography } from '@mui/material';
-import { getUserStorage } from '../services/UserStorage';
 import React from 'react';
 import ChartBarUser from '../components/user/ChartBarUser';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { getUserState, setUserState } from '../features/userReducer';
-import userAvatar from '../assets/img/user_avatar.png';
 import MenuChangeUser from '../components/user/MenuChangeUser';
+import ChartInfoDataBase from '../components/user/ChartInfoDataBase';
+import PersonIcon from '@mui/icons-material/Person';
 import { useHistory } from 'react-router';
+import { getUserStorage } from '../services/UserStorage';
+
 
 const PageUser: React.FC = () => {
   const history = useHistory();
@@ -16,21 +18,27 @@ const PageUser: React.FC = () => {
   const user = useAppSelector(getUserState);
   const dispatch = useAppDispatch();
 
-  if(userStorage.name.length > 0 && user.name.length === 0){
-     dispatch(setUserState(userStorage));
-  }else if(user.name.length == 0){
-     history.push("/");
+  if(userStorage.firstname.length > 0 && user.firstname.length === 0){
+    dispatch(setUserState(userStorage));
+  }else if(user.firstname.length == 0){
+    history.push("/login");
   }
 
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonMenuButton />
-          </IonButtons>
-          <IonTitle>Meu Cadastro</IonTitle>
-        </IonToolbar>
+        <div className="ion-toolbar-page">
+          <div className="ion-toolbar-page-left">
+              <IonButtons slot="start">
+                <IonMenuButton />
+              </IonButtons>
+              <Typography sx={{color: 'black', marginTop: '8px'}} variant="h6" component="h6">
+              Meu Cadastro
+              </Typography>
+          </div>
+          <div className="ion-toolbar-page-rigth">
+          </div>
+        </div>
       </IonHeader>
 
       <IonContent fullscreen>
@@ -40,9 +48,15 @@ const PageUser: React.FC = () => {
               <CardContent className="card-content-user">
                 <Stack direction="column" spacing={1}>
                   <Stack direction="row" spacing={1}>
-                    <Avatar alt="" src={user?.image ? user?.image : userAvatar} />
+                    {user?.iconImage64 ? 
+                      <Avatar alt="" src={user?.iconImage64} />
+                      : 
+                      <Avatar sx={{ bgcolor: '#188268' }}>
+                        <PersonIcon />
+                      </Avatar>
+                    }
                     <Typography sx={{color: 'black'}} variant="h5" component="h5">
-                      {user?.name} {user?.lastname}
+                      {user?.firstname} {user?.lastname}
                     </Typography>
                   </Stack>
                   <Typography>
@@ -54,10 +68,18 @@ const PageUser: React.FC = () => {
             </Card>
             <Card className="card">
               <Typography sx={{marginLeft: '10px', marginTop: '10px'}} variant="h6" component="h6" >
-                Consumo diário
+                Seu Consumo diário
               </Typography>
-              <CardContent className="google-chart">
+              <CardContent className="google-chart-user">
                 <ChartBarUser />
+              </CardContent>
+            </Card>
+            <Card className="card">
+              <Typography sx={{marginLeft: '10px', marginTop: '10px'}} variant="h6" component="h6" >
+                Base de Dados 
+              </Typography>
+              <CardContent className="google-chart-info-data-base">
+                <ChartInfoDataBase />
               </CardContent>
             </Card>
           </Grid>

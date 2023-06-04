@@ -6,8 +6,7 @@
 }
 
 #app-bar {
-    background-color: $menu-bg;
-    opacity: 1;
+    background-color: $primary-color;
 }
 
 #btn-icon-language {
@@ -34,4 +33,10 @@
 .img-qrcode {
     height: 80%;
     width: 80%;
+}
+
+h3 {
+    color: $black-color;
+    display: flex;
+    align-items: center;
 }

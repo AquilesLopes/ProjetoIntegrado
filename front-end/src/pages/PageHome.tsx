@@ -2,7 +2,7 @@ import { IonContent, IonPage } from '@ionic/react';
 import CardSimplePractical from '../components/home/CardSimplePractical';
 import CardInfoApi from '../components/home/CardInfoApi';
 
-import { Avatar, Button, CardContent, Grid, Stack, Typography } from '@mui/material';
+import { Avatar, Button, CardContent, Grid, Stack, Tooltip, Typography } from '@mui/material';
 import Footer from '../components/home/Footer';
 import { useHistory } from 'react-router';
 import { getUserStorage } from '../services/UserStorage';
@@ -12,8 +12,11 @@ import userAvatar from '../assets/img/user_avatar.png';
 import FindCaepiHome from '../components/home/find_caepi/FindCaepiHome';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import CardContentCaepi from '../components/home/documentation/CardContentCaepi';
-import ExampleCaepi from '../components/home/documentation/ExampleCaepi';
+import ExampleResponseGetCaepi from '../components/home/documentation/ExampleResponseGetCaepi';
 import { toast } from 'react-toastify';
+import PersonIcon from '@mui/icons-material/Person';
+import Fade from '@mui/material/Fade';
+import { CONFIG } from '../util/config';
  
 const PageHome: React.FC = () => {
   const history = useHistory();
@@ -31,16 +34,14 @@ const PageHome: React.FC = () => {
   }
 
   function openDocumentation(){
-    toast("Ao clicar o usuário será direcionado para a documentação gerada pelo Swagger.");
+    window.open(`${CONFIG.urlBase}/${CONFIG.doc}`, "_blank");
   }
-
-  
 
   const userStorage = getUserStorage();
   const user = useAppSelector(getUserState);
   const dispatch = useAppDispatch();
 
-  if(userStorage.name.length > 0 && user.name.length === 0){
+  if(userStorage.firstname.length > 0 && user.firstname.length === 0){
     dispatch(setUserState(userStorage));
   }
 
@@ -49,7 +50,7 @@ const PageHome: React.FC = () => {
       <IonContent className="ion-content" fullscreen>
           <div className="main-banner">
               <Grid container spacing={2}>
-                {user.name.length === 0 ?
+                {user.firstname.length === 0 ?
                   <Grid item xs={12}>
                     <Button className='btn-login' onClick={redirectToPageLogin}
                             color="warning" variant="contained" size="small">
@@ -60,12 +61,18 @@ const PageHome: React.FC = () => {
                       Criar conta
                     </Button>
                   </Grid>
-                :
+                : 
                   <Stack className="stack-avatar-user" direction="row" 
                          onClick={redirectToPageUser} spacing={0.5}>
-                    <Avatar alt="" src={user?.image ? user?.image : userAvatar} />
+                    {user?.iconImage64 ? 
+                      <Avatar alt="" src={user?.iconImage64} />
+                      : 
+                      <Avatar sx={{ bgcolor: '#188268' }}>
+                        <PersonIcon />
+                      </Avatar>
+                    }
                     <Typography sx={{color: 'black'}} variant="h6" component="h6">
-                        {user.name}
+                        {user.firstname}
                     </Typography>
                   </Stack>
                 }
@@ -73,7 +80,17 @@ const PageHome: React.FC = () => {
               <Grid className='grid-text' container spacing={2}>
                   <Grid item xs={12}>
                     <p><span className="color-black">Verifique a validade</span></p>
-                    <p><span className="color-black">do seu</span> <span className="secondary-color bold">Certificado EPI</span></p>
+                    <p>
+                      <span className="color-black">do seu </span> 
+                      <span className="secondary-color bold">
+                        Certificado 
+                        <Tooltip title="Equipamento de proteção individual" 
+                          TransitionComponent={Fade} 
+                          disableFocusListener arrow>
+                          <span className="secondary-color bold"> EPI</span>
+                        </Tooltip>
+                      </span>
+                    </p>
                   </Grid>
                   <Grid item xs={12}>
                       <FindCaepiHome />
@@ -104,7 +121,7 @@ const PageHome: React.FC = () => {
 
           <CardContentCaepi />
 
-          <ExampleCaepi />
+          <ExampleResponseGetCaepi />
 
           <CardContent className="footer-info-api">
             <p>Veja nossa documentação completa</p>

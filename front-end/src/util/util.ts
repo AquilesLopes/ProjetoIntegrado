@@ -1,6 +1,7 @@
 import { IUser } from "../interface/IUser";
 import { removeCaepiStorage } from "../services/CaepiStorage";
 import { removeUserStorage } from "../services/UserStorage";
+import { CONFIG } from "./config";
 
 export const isMobile : boolean = window.innerWidth <= 600;
 
@@ -77,6 +78,7 @@ export const styleModal = {
     position: 'absolute' as 'absolute',
     top: '30%',
     left: '50%',
+    backgroundColor: '#FAFAFA',
     transform: 'translate(-50%, -50%)',
     width: isMobile ? '98%' : '40%',
     bgcolor: 'background.paper',
@@ -115,10 +117,44 @@ export function stringIsDifferent(v1 : any, v2 : any){
 
 export function emptyUser(){
     const user : IUser = {
-        name: '',
+        firstname: '',
         lastname: '', 
         email: '',
-        image: ''
+        iconImage64: '',
+        token: ''
     };
     return user;
+}
+
+export function formatCNPJ(cnpj: string): string {
+    return cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+}
+
+export function sortJSON(data : any, key : string, way : string) {
+	try {
+		return data.sort(function(a : any, b : any) {
+	        var x = a[key]; 
+	        var y = b[key];
+	        
+	        try {
+	            x = a[key].toLowerCase().trim(); 
+	            y = b[key].toLowerCase().trim();
+		   	}catch(err) {
+		   		x = a[key]; 
+		        y = b[key];
+		   	}
+	        
+	        if (way === '123' ) { return ((x < y) ? -1 : ((x > y) ? 1 : 0)); }
+	        if (way === '321') { return ((x > y) ? -1 : ((x < y) ? 1 : 0)); }
+	    });
+	}catch(err) {
+	}
+}
+
+export function isValidNumberCaepi(number : number){
+    if(number >= CONFIG.minorNumber && number <= CONFIG.biggestNumber){
+         return true;
+    }else {
+         return false;
+    }
 }

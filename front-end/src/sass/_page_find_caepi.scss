@@ -1,0 +1,59 @@
+
+
+.btn-caepi {
+    color: $ligth-color !important;
+    border-color: $primary-color !important;
+    background-color: $primary-color !important;
+    border-radius: 30px !important;
+    min-width: 120px !important;
+    text-transform: capitalize !important;
+    margin-top: 5px !important;
+
+    &:hover {
+        background-color: $secondary-color !important;
+        color: $dark-color !important;
+    }
+}
+
+.menu-card-caepi-desktop {
+    float: right !important; 
+
+    @include mobile {
+        display: none;
+    }
+}
+
+.menu-card-caepi-mobile {
+    float: right !important; 
+    display: none;
+
+    @include mobile {
+        display: block;
+    }
+}
+
+.number-caepi {
+    text-decoration: underline;
+    font-weight: 700 !important;
+}
+
+.modal-card-content {
+    max-height: 300px;
+    overflow: scroll;
+    padding: 0px;
+}
+
+.form-find-caepi-user {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    padding: 10px;
+    gap: 5px;
+    width: 100%;
+
+    @include mobile {
+        padding: 0px;
+    }
+}
+
+

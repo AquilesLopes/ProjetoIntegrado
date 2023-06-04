@@ -1,17 +1,21 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { Button, CardContent, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography } from '@mui/material';
+import { Button, CardContent, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { Formik } from 'formik';
-import { Link, useHistory } from 'react-router-dom';
-import { setUserStorage } from '../../services/UserStorage';
+import { useHistory } from 'react-router-dom';
+import { getUserStorage, setUserStorage } from '../../services/UserStorage';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { hasErrosInputs } from '../../util/util';
+import { cleanStorage, emptyUser, hasErrosInputs } from '../../util/util';
 import { toast } from 'react-toastify';
-import { useAppDispatch } from '../../app/hooks';
+import { CONFIG } from '../../util/config';
+import axios from 'axios';
+import { getUserLogged, loginService } from '../../services/UserService';
 import { setUserState } from '../../features/userReducer';
+import { useAppDispatch } from '../../app/hooks';
+import { setHistoricCaepiState } from '../../features/historicCaepiReducer';
 
 interface IFormLogin {
   email: string,
@@ -52,9 +56,9 @@ function hasErros(value : string | undefined){
 }
 
 export default function FormLogin() {
-  const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = React.useState(false);
   const history = useHistory();
+  const dispatch = useAppDispatch();
 
   function handleChangeShowPassword(){
     setShowPassword(showPassword ? false : true);
@@ -63,7 +67,13 @@ export default function FormLogin() {
   function exitSystem(){
     history.push("/");
   } 
- 
+
+  function cleanLocalStorage(){
+    cleanStorage();
+    dispatch(setUserState(emptyUser()));
+    dispatch(setHistoricCaepiState([]));
+  }
+
   return (
     <React.Fragment>
       <Formik
@@ -76,30 +86,60 @@ export default function FormLogin() {
           return hasErrosInputs(errors) ? errors : {};
         }}
 
-        onSubmit={(values, { setSubmitting }) => {
+        onSubmit={(values, actions) => {
           const idToast = toast.loading("Logando...");
-          setTimeout(() => {
-            var nameUser = values.email.split('@')[0];
 
-            const userLoged = {
-              name: nameUser[0].toUpperCase() + nameUser.substring(1),
-              lastname: "",
-              email: values.email
-            }
+          cleanLocalStorage();
 
-            setUserStorage(userLoged);
-            dispatch(setUserState(userLoged));
+          const email = values.email.toLowerCase().trim();
 
-            toast.update(idToast, {
-              render: "Logado com sucesso!", 
-              type: "success", 
-              isLoading: false, 
-              autoClose: 1500}
-            );
+          loginService(email, values.password).then((status) => {
+              actions.setSubmitting(false);
+              if(status === 200){
+                  getUserLogged().then((res : any) => {
+                      if(res.status === 200){
+                        const userStorage = getUserStorage();
+                        const userLoged = {
+                            firstname: res.data.firstname,
+                            lastname: res.data.lastname,
+                            email: res.data.email,
+                            iconImage64: res.data.iconImage64,
+                            token: userStorage.token
+                        }
+                        setUserStorage(userLoged);
+                        dispatch(setUserState(userLoged));
 
-            setSubmitting(false);
-            history.push("/user");
-          }, 2000);
+                        toast.update(idToast, {
+                          render: "Logado com sucesso!", 
+                          type: "success", 
+                          isLoading: false, 
+                          autoClose: 1500}
+                        );
+                        history.push("/user");
+                      }else{
+                        toast.update(idToast, {
+                          render: "Erro ao sincroizar usuário", 
+                          type: "error", 
+                          isLoading: false, 
+                          autoClose: 1500}
+                        );
+                      }
+                  });
+              }else {
+                toast.update(idToast, {
+                  render: "Acesso negado!", 
+                  type: "error", 
+                  isLoading: false, 
+                  autoClose: 1500}
+                );
+                const errors = {
+                    email: "Verifique se seu e-mail está correto!", 
+                    password: "Verifique se sua senha está correta!"
+                };
+                actions.setErrors(errors);
+              }
+          });
+
         }}
       >
       {({
@@ -149,7 +189,7 @@ export default function FormLogin() {
           </CardContent>
 
           <Box className="box-btn-form" >
-              <Button sx={{margin: '10px'}} onClick={exitSystem} variant="contained" color="error">
+              <Button sx={{margin: '10px'}} onClick={exitSystem} variant="outlined" color="error">
                   <CancelIcon sx={{marginRight: '5px'}} /> Cancelar 
               </Button>
               <Button sx={{margin: '10px'}} disabled={isSubmitting} type="submit" 
